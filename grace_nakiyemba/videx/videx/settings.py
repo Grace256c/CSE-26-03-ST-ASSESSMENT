@@ -1,14 +1,19 @@
 import os
 from pathlib import Path
+from dotenv import load_dotenv
+from django.contrib.messages import constants as messages
+
+# Load .env file
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-videx-change-this-in-production-xyz123abc456'
+SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-videx-change-this-in-production-xyz123abc456')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = ['*']
 
@@ -21,6 +26,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # Your app
     'web',
 ]
 
@@ -34,13 +41,12 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-# Replace 'videx' below with your actual project folder name
-ROOT_URLCONF = 'videx.urls'
+ROOT_URLCONF = 'assessment.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],  # optional global templates folder
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -53,8 +59,7 @@ TEMPLATES = [
     },
 ]
 
-# Replace 'videx' below with your actual project folder name
-WSGI_APPLICATION = 'videx.wsgi.application'
+WSGI_APPLICATION = 'assessment.wsgi.application'
 
 
 # Database
@@ -82,7 +87,7 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
+# Static files
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
@@ -98,16 +103,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 # Messages framework
-from django.contrib.messages import constants as messages
 MESSAGE_TAGS = {
-    messages.DEBUG: 'debug',
-    messages.INFO: 'info',
+    messages.DEBUG:   'debug',
+    messages.INFO:    'info',
     messages.SUCCESS: 'success',
     messages.WARNING: 'warning',
-    messages.ERROR: 'error',
+    messages.ERROR:   'error',
 }
 
 
-# File upload size limit (500MB max for videos)
-DATA_UPLOAD_MAX_MEMORY_SIZE = 524288000   # 500 MB
-FILE_UPLOAD_MAX_MEMORY_SIZE = 524288000   # 500 MB
+# File upload size limit (500MB for videos)
+DATA_UPLOAD_MAX_MEMORY_SIZE = 524288000
+FILE_UPLOAD_MAX_MEMORY_SIZE = 524288000
